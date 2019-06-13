@@ -82,8 +82,15 @@ public class DBBookHandlers {
         Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<DbBook> realmResults = Realm.getDefaultInstance().where(DbBook.class).equalTo("bookId", book.getBookId()).findAll();
-                realmResults.deleteAllFromRealm();
+                RealmResults<DbBook> realmResults = Realm.getDefaultInstance().where(DbBook.class).findAll();
+                DbBook bookObj = realmResults.where().equalTo("bookId", book.getBookId()).findFirst();
+                if (bookObj != null) {
+                    if (!realm.isInTransaction()) {
+                        realm.beginTransaction();
+                    }
+                    bookObj.deleteFromRealm();
+                    realm.commitTransaction();
+                }
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -116,7 +123,7 @@ public class DBBookHandlers {
         return bookList;
     }
 
-    private void getBook() {
+    private void getSpecificBook() {
 
     }
 }
