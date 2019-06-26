@@ -28,27 +28,27 @@ public class RealmController {
     }
 
 
-   /* //find all objects in the Book.class
-    public RealmResults<Book> getBooks() {
-        return realm.where(Book.class).findAll();
+   /* //find all objects in the DbBook.class
+    public RealmResults<DbBook> getBooks() {
+        return realm.where(DbBook.class).findAll();
     }
 
     //query a single item with the given id
-    public Book getBook(String id) {
+    public DbBook getBook(String id) {
 
-        return realm.where(Book.class).equalTo("id", id).findFirst();
+        return realm.where(DbBook.class).equalTo("id", id).findFirst();
     }
 
-    //check if Book.class is empty
+    //check if DbBook.class is empty
     public boolean hasBooks() {
 
-        return !realm.allObjects(Book.class).isEmpty();
+        return !realm.allObjects(DbBook.class).isEmpty();
     }
 
     //query example
-    public RealmResults<Book> queryedBooks() {
+    public RealmResults<DbBook> queryedBooks() {
 
-        return realm.where(Book.class)
+        return realm.where(DbBook.class)
                 .contains("author", "Author 0")
                 .or()
                 .contains("title", "Realm")

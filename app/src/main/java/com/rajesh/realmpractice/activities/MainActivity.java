@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView bookListView;
     private Button addButton;
-    List<DbBook> bookList = new ArrayList<>();
+    List<DbBook> dbBookList = new ArrayList<>();
     BookAdapter adapter = new BookAdapter(new ArrayList<DbBook>());
 
     @Override
@@ -30,23 +30,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         addButton = findViewById(R.id.addDataBtn);
         bookListView = findViewById(R.id.listView);
-        DBBookHandlers.getInstance().deleteAllBooks();
+        // DBBookHandlers.getInstance().deleteAllBooks();
         //configureBookList();
         configureBulkBookList();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DbBook book = new DbBook();
-                book.setBookId((int) System.currentTimeMillis());
-                book.setName("Game of thrones");
-                book.setAuthor("Jane doe");
-                book.setPrice("$400");
-                DBBookHandlers.getInstance().saveBook(book, new DatabaseListener<String>() {
+                DbBook dbBook = new DbBook();
+                dbBook.setBookId((int) System.currentTimeMillis());
+                dbBook.setName("Game of thrones");
+                dbBook.setAuthor("Jane doe");
+                dbBook.setPrice("$400");
+                dbBook.setPublishYear("2009");
+                DBBookHandlers.getInstance().saveBook(dbBook, new DatabaseListener<String>() {
                     @Override
                     public void success(String response) {
-                        List<DbBook> bookList = DBBookHandlers.getInstance().getBookList();
-                        adapter.updateBookList(bookList);
+                        List<DbBook> dbBookList = DBBookHandlers.getInstance().getBookList();
+                        adapter.updateBookList(dbBookList);
                     }
 
                     @Override
@@ -59,29 +60,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configureBookList() {
-        List<DbBook> bookList = DBBookHandlers.getInstance().getBookList();
-        adapter = new BookAdapter(bookList);
+        List<DbBook> dbBookList = DBBookHandlers.getInstance().getBookList();
+        adapter = new BookAdapter(dbBookList);
         bookListView.setAdapter(adapter);
     }
 
     private void configureBulkBookList() {
-        adapter = new BookAdapter(bookList);
+        adapter = new BookAdapter(dbBookList);
         bookListView.setAdapter(adapter);
 
-        for (int i = 0; i < 2; i++) {
+      /*  for (int i = 0; i < 2; i++) {
             DbBook book = new DbBook();
             book.setBookId((int) System.currentTimeMillis() + i);
             book.setName("Harry potter " + i);
             book.setAuthor("John doe");
             book.setPrice("$400");
-            bookList.add(book);
-        }
+            dbBookList.add(book);
+        }*/
 
-        DBBookHandlers.getInstance().saveBookList(bookList, new DatabaseListener<String>() {
+        DBBookHandlers.getInstance().saveBookList(dbBookList, new DatabaseListener<String>() {
             @Override
             public void success(String response) {
-                bookList = DBBookHandlers.getInstance().getBookList();
-                adapter.updateBookList(bookList);
+                dbBookList = DBBookHandlers.getInstance().getBookList();
+                adapter.updateBookList(dbBookList);
             }
 
             @Override
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(int position) {
                 Toast.makeText(MainActivity.this, "message: " + position, Toast.LENGTH_SHORT).show();
 
-                DBBookHandlers.getInstance().deleteSpecificBook(bookList.get(position), new DatabaseListener<String>() {
+                DBBookHandlers.getInstance().deleteSpecificBook(dbBookList.get(position), new DatabaseListener<String>() {
                     @Override
                     public void success(String response) {
                         Toast.makeText(MainActivity.this, "message: " + response, Toast.LENGTH_SHORT).show();

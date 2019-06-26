@@ -11,6 +11,7 @@ public class DbBook extends RealmObject implements Serializable {
     private String name;
     private String price;
     private String author;
+    private String published;
 
     public DbBook(){
 
@@ -46,5 +47,13 @@ public class DbBook extends RealmObject implements Serializable {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getPublishYear() {
+        return published;
+    }
+
+    public void setPublishYear(String publishYear) {
+        this.published = publishYear;
     }
 }

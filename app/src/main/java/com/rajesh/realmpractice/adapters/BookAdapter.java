@@ -17,12 +17,12 @@ import java.util.List;
 public class BookAdapter extends BaseAdapter {
 
 
-    private List<DbBook> bookList;
+    private List<DbBook> dbBookList;
     private CustomClickListener_Callback customClickListener_callback;
 
 
-    public BookAdapter(List<DbBook> bookList) {
-        this.bookList = bookList;
+    public BookAdapter(List<DbBook> dbBookList) {
+        this.dbBookList = dbBookList;
     }
 
     public void setOnRecyclerItemClick(CustomClickListener_Callback customClickListener_callback) {
@@ -32,12 +32,12 @@ public class BookAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return bookList.size();
+        return dbBookList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return bookList.get(position);
+        return dbBookList.get(position);
     }
 
     @Override
@@ -55,11 +55,13 @@ public class BookAdapter extends BaseAdapter {
         TextView authorTV = convertView.findViewById(R.id.authorNameTV);
         TextView priceTV = convertView.findViewById(R.id.priceTV);
         TextView deleteTV = convertView.findViewById(R.id.deleteTV);
+        TextView publishTV = convertView.findViewById(R.id.publishTV);
 
-        DbBook book = bookList.get(position);
-        nameTV.setText(book.getName());
-        authorTV.setText(book.getAuthor());
-        priceTV.setText(book.getPrice());
+        DbBook dbBook = dbBookList.get(position);
+        nameTV.setText(dbBook.getName());
+        authorTV.setText(dbBook.getAuthor());
+        priceTV.setText(dbBook.getPrice());
+        publishTV.setText(dbBook.getPublishYear());
 
         deleteTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,8 +73,8 @@ public class BookAdapter extends BaseAdapter {
     }
 
 
-    public void updateBookList(List<DbBook> bookList) {
-        this.bookList = bookList;
+    public void updateBookList(List<DbBook> dbBookList) {
+        this.dbBookList = dbBookList;
         notifyDataSetChanged();
     }
 }

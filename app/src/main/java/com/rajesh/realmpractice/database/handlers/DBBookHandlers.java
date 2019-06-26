@@ -33,7 +33,7 @@ public class DBBookHandlers {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                Log.e(TAG, "book list saved");
+                Log.e(TAG, "dbBook list saved");
                 databaseListener.success("success");
             }
         }, new Realm.Transaction.OnError() {
@@ -78,17 +78,17 @@ public class DBBookHandlers {
 
     }
 
-    public void deleteSpecificBook(final DbBook book, final DatabaseListener<String> databaseListener) {
+    public void deleteSpecificBook(final DbBook dbBook, final DatabaseListener<String> databaseListener) {
         Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<DbBook> realmResults = Realm.getDefaultInstance().where(DbBook.class).findAll();
-                DbBook bookObj = realmResults.where().equalTo("bookId", book.getBookId()).findFirst();
-                if (bookObj != null) {
+                DbBook dbBookObj = realmResults.where().equalTo("bookId", dbBook.getBookId()).findFirst();
+                if (dbBookObj != null) {
                     if (!realm.isInTransaction()) {
                         realm.beginTransaction();
                     }
-                    bookObj.deleteFromRealm();
+                    dbBookObj.deleteFromRealm();
                     realm.commitTransaction();
                 }
             }
@@ -115,12 +115,12 @@ public class DBBookHandlers {
     }
 
     public List<DbBook> getBookList() {
-//        List<DbBook> bookList = Realm.getDefaultInstance().where(DbBook.class).equalTo("fieldId", "value").findAllAsync();
-        List<DbBook> bookList = Realm.getDefaultInstance().where(DbBook.class).findAll();
-        if (bookList == null) {
-            bookList = new ArrayList<>();
+//        List<DbBook> dbBookList = Realm.getDefaultInstance().where(DbBook.class).equalTo("fieldId", "value").findAllAsync();
+        List<DbBook> dbBookList = Realm.getDefaultInstance().where(DbBook.class).findAll();
+        if (dbBookList == null) {
+            dbBookList = new ArrayList<>();
         }
-        return bookList;
+        return dbBookList;
     }
 
     private void getSpecificBook() {
