@@ -31,9 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         addButton = findViewById(R.id.addDataBtn);
         bookListView = findViewById(R.id.listView);
-        // DBBookHandlers.getInstance().deleteAllBooks();
-        //configureBookList();
-        configureBulkBookList();
+        configureBookList();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 dbBook.setName("Game of thrones");
                 dbBook.setAuthor("Jane doe");
                 dbBook.setPrice("$400");
-                published = (published + 1000);
+                published = (published + 1);
                 dbBook.setPublishYear(String.valueOf(published));
                 DBBookHandlers.getInstance().saveBook(dbBook, new DatabaseListener<String>() {
                     @Override
@@ -54,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void failure(String response) {
+                        Toast.makeText(MainActivity.this, "message: " + response, Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -62,23 +61,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configureBookList() {
-        List<DbBook> dbBookList = DBBookHandlers.getInstance().getBookList();
         adapter = new BookAdapter(dbBookList);
         bookListView.setAdapter(adapter);
-    }
-
-    private void configureBulkBookList() {
-        adapter = new BookAdapter(dbBookList);
-        bookListView.setAdapter(adapter);
-
-      /*  for (int i = 0; i < 2; i++) {
-            DbBook book = new DbBook();
-            book.setBookId((int) System.currentTimeMillis() + i);
-            book.setName("Harry potter " + i);
-            book.setAuthor("John doe");
-            book.setPrice("$400");
-            dbBookList.add(book);
-        }*/
 
         DBBookHandlers.getInstance().saveBookList(dbBookList, new DatabaseListener<String>() {
             @Override
@@ -97,8 +81,6 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnRecyclerItemClick(new CustomClickListener_Callback() {
             @Override
             public void onClick(int position) {
-                Toast.makeText(MainActivity.this, "message: " + position, Toast.LENGTH_SHORT).show();
-
                 DBBookHandlers.getInstance().deleteSpecificBook(dbBookList.get(position), new DatabaseListener<String>() {
                     @Override
                     public void success(String response) {

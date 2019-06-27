@@ -68,7 +68,6 @@ public class DBBookHandlers {
     }
 
     public void deleteAllBooks() {
-
         AppController.getmInstance().getRealm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -88,7 +87,7 @@ public class DBBookHandlers {
             @Override
             public void execute(Realm realm) {
                 RealmResults<DbBook> realmResults = realm.where(DbBook.class)
-                        .equalTo("published", dbBook.getPublishYear())
+                        .equalTo("bookId", dbBook.getBookId())
                         .findAll();
                 if (realmResults.size() > 0) {
                     realmResults.deleteFirstFromRealm();
@@ -109,7 +108,6 @@ public class DBBookHandlers {
     }
 
     public List<DbBook> getBookList() {
-//        List<DbBook> dbBookList = Realm.getDefaultInstance().where(DbBook.class).equalTo("fieldId", "value").findAllAsync();
         List<DbBook> dbBookList = Realm.getDefaultInstance().where(DbBook.class).findAll();
         if (dbBookList == null) {
             dbBookList = new ArrayList<>();

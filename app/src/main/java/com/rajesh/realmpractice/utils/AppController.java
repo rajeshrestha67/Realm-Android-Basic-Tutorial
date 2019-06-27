@@ -11,7 +11,7 @@ import io.realm.RealmConfiguration;
 public class AppController extends Application {
     private static AppController mInstance;
     private Context context;
-    Realm realm;
+    private Realm realm;
 
     public static synchronized AppController getmInstance() {
         return mInstance;
@@ -39,7 +39,7 @@ public class AppController extends Application {
         mInstance = this;
     }
 
-    public Realm getRealm(){
+    public Realm getRealm() {
         return realm;
     }
 
