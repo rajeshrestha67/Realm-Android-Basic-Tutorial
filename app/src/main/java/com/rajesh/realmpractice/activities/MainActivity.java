@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private Button addButton;
     List<DbBook> dbBookList = new ArrayList<>();
     BookAdapter adapter = new BookAdapter(new ArrayList<DbBook>());
+    private static int published = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
                 dbBook.setName("Game of thrones");
                 dbBook.setAuthor("Jane doe");
                 dbBook.setPrice("$400");
-                dbBook.setPublishYear("2009");
+                published = (published + 1000);
+                dbBook.setPublishYear(String.valueOf(published));
                 DBBookHandlers.getInstance().saveBook(dbBook, new DatabaseListener<String>() {
                     @Override
                     public void success(String response) {
@@ -101,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void success(String response) {
                         Toast.makeText(MainActivity.this, "message: " + response, Toast.LENGTH_SHORT).show();
+                        dbBookList = DBBookHandlers.getInstance().getBookList();
+                        adapter.updateBookList(dbBookList);
                     }
 
                     @Override

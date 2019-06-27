@@ -11,6 +11,7 @@ import io.realm.RealmConfiguration;
 public class AppController extends Application {
     private static AppController mInstance;
     private Context context;
+    Realm realm;
 
     public static synchronized AppController getmInstance() {
         return mInstance;
@@ -33,9 +34,13 @@ public class AppController extends Application {
                 .migration(new RealmMigrationHelper())
                 .build();
         Realm.setDefaultConfiguration(config);
-        Realm.getInstance(config);
+        realm = Realm.getInstance(config);
         context = getApplicationContext();
         mInstance = this;
+    }
+
+    public Realm getRealm(){
+        return realm;
     }
 
     @Override

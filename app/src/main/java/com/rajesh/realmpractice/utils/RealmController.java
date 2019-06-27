@@ -7,7 +7,7 @@ public class RealmController {
     private static RealmController realmControllerInstance;
     private final Realm realm;
 
-    public RealmController() {
+    private RealmController() {
         realm = Realm.getDefaultInstance();
     }
 

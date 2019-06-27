@@ -3,6 +3,7 @@ package com.rajesh.realmpractice.database.handlers;
 import android.util.Log;
 
 import com.rajesh.realmpractice.database.tables.DbBook;
+import com.rajesh.realmpractice.utils.AppController;
 import com.rajesh.realmpractice.utils.DatabaseListener;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class DBBookHandlers {
     }
 
     public void saveBook(final DbBook dbBook, final DatabaseListener<String> databaseListener) {
-        Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
+        AppController.getmInstance().getRealm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.insertOrUpdate(dbBook);
@@ -46,7 +47,7 @@ public class DBBookHandlers {
     }
 
     public void saveBookList(final List<DbBook> dbBookList, final DatabaseListener<String> databaseListener) {
-        Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
+        AppController.getmInstance().getRealm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.insertOrUpdate(dbBookList);
@@ -68,7 +69,7 @@ public class DBBookHandlers {
 
     public void deleteAllBooks() {
 
-        Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
+        AppController.getmInstance().getRealm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<DbBook> realmResults = Realm.getDefaultInstance().where(DbBook.class).findAll();
@@ -79,31 +80,24 @@ public class DBBookHandlers {
     }
 
     public void deleteSpecificBook(final DbBook dbBook, final DatabaseListener<String> databaseListener) {
-        Realm.getDefaultInstance().executeTransactionAsync(new Realm.Transaction() {
+        /**
+         * do not delete realm record in executeTransactionAsync because that will create another thread  and delete won't work
+         */
+
+        AppController.getmInstance().getRealm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<DbBook> realmResults = Realm.getDefaultInstance().where(DbBook.class).findAll();
-                DbBook dbBookObj = realmResults.where().equalTo("bookId", dbBook.getBookId()).findFirst();
-                if (dbBookObj != null) {
-                    if (!realm.isInTransaction()) {
-                        realm.beginTransaction();
-                    }
-                    dbBookObj.deleteFromRealm();
-                    realm.commitTransaction();
+                RealmResults<DbBook> realmResults = realm.where(DbBook.class)
+                        .equalTo("published", dbBook.getPublishYear())
+                        .findAll();
+                if (realmResults.size() > 0) {
+                    realmResults.deleteFirstFromRealm();
+                    databaseListener.success("success");
+                } else {
+                    Log.e("handler", "no record found");
+                    databaseListener.failure("failure");
+
                 }
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                databaseListener.success("successfully deleted record");
-
-            }
-        }, new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-                Log.e(TAG, "error: " + error.getMessage());
-                databaseListener.failure("cannot delete record : " + error.getMessage());
-
             }
         });
 

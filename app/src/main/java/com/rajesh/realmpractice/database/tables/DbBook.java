@@ -7,7 +7,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class DbBook extends RealmObject implements Serializable {
     @PrimaryKey
-    public int bookId;
+    private int bookId;
     private String name;
     private String price;
     private String author;
